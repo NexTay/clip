@@ -65,7 +65,7 @@ final class ClipboardStore: ObservableObject {
             }
         if startMonitoring {
             timer = Timer.scheduledTimer(withTimeInterval: 0.55, repeats: true) { [weak self] _ in
-                Task { @MainActor in self?.poll() }
+                Task { @MainActor [weak self] in self?.poll() }
             }
         }
     }

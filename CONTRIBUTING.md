@@ -20,5 +20,6 @@ Do not include real clipboard history, personal preferences, credentials, build 
 - `Resources/BrandMark.png`: supplied NexTay Solutions mark, bundled for offline use.
 - `Tests/NextayClipTests/ClipboardStoreTests.swift`: isolated regression suite.
 - `scripts/build-app.sh`: release app packaging, icon creation, and local signing.
+- `scripts/package-release.sh`: universal Apple Silicon/Intel builds and DMG, PKG, ZIP, and checksum packaging.
 
 The project has no external packages. Keep clipboard data local and disclose any proposed changes to storage or network behavior in your pull request. Contributions are provided under the project's MIT License.

@@ -1,8 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-swift build -c release
-BIN_DIR="$(swift build -c release --show-bin-path)"
+BUILD_ARGS=(-c release)
+if [[ "${1:-}" == "--universal" && $# -eq 1 ]]; then
+    BUILD_ARGS+=(--arch arm64 --arch x86_64)
+elif [[ $# -gt 0 ]]; then
+    echo "Usage: bash scripts/build-app.sh [--universal]" >&2
+    exit 2
+fi
+swift build "${BUILD_ARGS[@]}"
+BIN_DIR="$(swift build "${BUILD_ARGS[@]}" --show-bin-path)"
 APP="$PWD/dist/NextayClip.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN_DIR/NextayClip" "$APP/Contents/MacOS/NextayClip"

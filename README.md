@@ -6,7 +6,22 @@
 
 Nextay Clip lives behind a paperclip in your menu bar. Copy text, choose it from the dropdown, and paste it wherever you need it. There is no main window at startup, no account, and no subscription.
 
-## Requirements
+## Download and install
+
+**[Download the macOS DMG](https://github.com/NexTay/clip/releases/download/v0.2.0/NextayClip-0.2.0-universal.dmg)** · [PKG installer](https://github.com/NexTay/clip/releases/download/v0.2.0/NextayClip-0.2.0-universal.pkg) · [All releases](https://github.com/NexTay/clip/releases)
+
+No developer tools are needed for these downloads. Both support **Apple Silicon and Intel Macs running macOS 13 or later**.
+
+1. Download and open the DMG.
+2. Quit any running copy of Nextay Clip, then drag the app onto **Applications**.
+3. Eject the disk image and open Nextay Clip from Applications.
+4. Look for the **paperclip in the menu bar**, or press **⌘⇧V**.
+
+Alternatively, open the PKG installer and follow its prompts to install into `/Applications`. It may request administrator approval. A ZIP and SHA-256 checksums are also available on the release page.
+
+The current downloads are locally signed, **not Apple-notarized**. If macOS blocks the installer or app, review it under **System Settings → Privacy & Security → Open Anyway**. See [Apple's first-launch guidance](https://support.apple.com/en-us/102445).
+
+## Requirements for building from source
 
 - macOS 13 Ventura or later.
 - Xcode Command Line Tools with Swift 5.9 or later, or a recent Xcode installation.
@@ -88,6 +103,9 @@ bash scripts/test.sh
 # Release packaging, bundled assets, and local signing
 bash scripts/build-app.sh
 
+# Universal DMG, PKG, ZIP, and checksums for distribution
+bash scripts/package-release.sh
+
 # Explicitly open Settings for development (normal launch stays in the menu bar)
 open dist/NextayClip.app --args --settings
 ```
@@ -95,6 +113,8 @@ open dist/NextayClip.app --args --settings
 The standalone Swift test runner works with Command Line Tools without XCTest. It checks history limits, retention, persistence, pin preservation, pause/resume, duplicate handling, copying, clearing, and preference validation. It never reads your real clipboard history.
 
 GitHub Actions builds and tests the project on macOS and uploads a locally signed app ZIP as a workflow artifact. That artifact is not a notarized installer.
+
+Pushing a version tag (for example, `v0.2.0`) runs the release workflow: regression checks, a universal build, installer packaging, and publication of the DMG, PKG, ZIP, and checksums to GitHub Releases. The tag must match `CFBundleShortVersionString` in `scripts/build-app.sh`. Manual runs upload the installers as workflow artifacts without publishing a release.
 
 Before submitting a change, also check the actual app: launch quietly, open the paperclip menu, copy and restore text, open Settings, change preferences, close Settings, and restart. Verify light/dark appearance and login behavior on your Mac. See [CONTRIBUTING.md](CONTRIBUTING.md).
 

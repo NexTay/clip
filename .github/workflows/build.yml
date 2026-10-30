@@ -1,0 +1,31 @@
+name: macOS build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test history and preferences
+        run: bash scripts/test.sh
+      - name: Build app
+        run: bash scripts/build-app.sh
+      - name: Verify signature and bundled logo
+        run: |
+          codesign --verify --deep --strict dist/NextayClip.app
+          test -f dist/NextayClip.app/Contents/Resources/NextayClip_NextayClip.bundle/BrandMark.png || test -f dist/NextayClip.app/Contents/Resources/NextayClip_NextayClip.bundle/Contents/Resources/BrandMark.png
+      - name: Package app
+        run: ditto -c -k --sequesterRsrc --keepParent dist/NextayClip.app dist/NextayClip-macOS.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NextayClip-macOS
+          path: dist/NextayClip-macOS.zip
+          if-no-files-found: error
